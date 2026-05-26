@@ -1,18 +1,54 @@
 @page "/voicebot"
 @inject BotConfig Bot
+@inject IJSRuntime JS
 
-<div data-testid="voicebot-container">
-    <h2>VoiceBotNew</h2>
+<h2>VoiceBotNew</h2>
 
-    <p>Bot endpoint: @Bot.Endpoint</p>
+<p><strong>Bot endpoint:</strong> @Bot.Endpoint</p>
 
-    <button data-testid="mic-button">🎤 Start Listening</button>
+<button @onclick="StartListening" data-testid="mic-button">🎤 Start Listening</button>
+<button @onclick="StopListening" data-testid="stop-button">⏹ Stop</button>
 
-    <div data-testid="transcript-area">
-        Transcript will appear here...
-    </div>
+<h3>Transcript</h3>
+<div data-testid="transcript-area">@Transcript</div>
 
-    <div data-testid="bot-response-area">
-        Bot responses will appear here...
-    </div>
-</div>
+<h3>Bot Response</h3>
+<div data-testid="bot-response-area">@BotResponse</div>
+
+@code {
+    private string Transcript = "";
+    private string BotResponse = "";
+    private DotNetObjectReference<VoiceBot> objRef;
+
+    protected override async Task OnInitializedAsync()
+    {
+        objRef = DotNetObjectReference.Create(this);
+
+        await JS.InvokeVoidAsync("voiceBot.init", Bot.Endpoint, objRef);
+        _ = JS.InvokeVoidAsync("voiceBot.listenForResponses");
+    }
+
+    private async Task StartListening()
+    {
+        await JS.InvokeVoidAsync("voiceBot.startMic");
+    }
+
+    private async Task StopListening()
+    {
+        await JS.InvokeVoidAsync("voiceBot.stopMic");
+    }
+
+    [JSInvokable]
+    public void OnTranscript(string text)
+    {
+        Transcript = text;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void OnBotResponse(string text)
+    {
+        BotResponse = text;
+        StateHasChanged();
+    }
+}
