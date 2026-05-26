@@ -2,18 +2,27 @@
 @inject BotConfig Bot
 @inject IJSRuntime JS
 
-<h2>VoiceBotNew</h2>
+<div data-testid="voicebot-container">
 
-<p><strong>Bot endpoint:</strong> @Bot.Endpoint</p>
+    <h2>VoiceBotNew</h2>
 
-<button @onclick="StartListening" data-testid="mic-button">🎤 Start Listening</button>
-<button @onclick="StopListening" data-testid="stop-button">⏹ Stop</button>
+    <p><strong>Bot endpoint:</strong> @Bot.Endpoint</p>
 
-<h3>Transcript</h3>
-<div data-testid="transcript-area">@Transcript</div>
+    <button @onclick="StartListening" data-testid="mic-button">
+        🎤 Start Listening
+    </button>
 
-<h3>Bot Response</h3>
-<div data-testid="bot-response-area">@BotResponse</div>
+    <button @onclick="StopListening" data-testid="stop-button">
+        ⏹ Stop
+    </button>
+
+    <h3>Transcript</h3>
+    <div data-testid="transcript-area">@Transcript</div>
+
+    <h3>Bot Response</h3>
+    <div data-testid="bot-response-area">@BotResponse</div>
+
+</div>
 
 @code {
     private string Transcript = "";
