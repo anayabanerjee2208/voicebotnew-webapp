@@ -35,11 +35,18 @@ jobs:
           chmod +x node_modules/.bin/playwright
           npx playwright install --with-deps
 
+      - name: List build output
+        run: |
+          echo "Listing build/wwwroot"
+          ls -R build/wwwroot
+
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/wwwroot
+          force_orphan: true
 
       - name: Run Playwright tests against GitHub Pages
         run: |
