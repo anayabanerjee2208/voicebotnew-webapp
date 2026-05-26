@@ -1,0 +1,18 @@
+@page "/voicebot"
+@inject BotConfig Bot
+
+<div data-testid="voicebot-container">
+    <h2>VoiceBotNew</h2>
+
+    <p>Bot endpoint: @Bot.Endpoint</p>
+
+    <button data-testid="mic-button">🎤 Start Listening</button>
+
+    <div data-testid="transcript-area">
+        Transcript will appear here...
+    </div>
+
+    <div data-testid="bot-response-area">
+        Bot responses will appear here...
+    </div>
+</div>
