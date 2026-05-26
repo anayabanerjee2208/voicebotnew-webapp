@@ -29,8 +29,13 @@ jobs:
           dotnet restore
           dotnet publish -c Release -o build
 
+      - name: Find publish folder
+        run: find . -type d -path "*/publish/wwwroot"
+
       - name: Add .nojekyll
-        run: touch bin/Release/net8.0/publish/wwwroot/.nojekyll
+        run: |
+          PUBLISH_DIR=$(find . -type d -path "*/publish/wwwroot" | head -n 1)
+          touch "$PUBLISH_DIR/.nojekyll"
 
       - name: List build output
         run: |
