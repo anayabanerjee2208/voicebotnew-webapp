@@ -29,6 +29,9 @@ jobs:
           dotnet restore
           dotnet publish -c Release -o build
 
+      - name: Add .nojekyll
+        run: touch bin/Release/net8.0/publish/wwwroot/.nojekyll
+
       - name: List build output
         run: |
           echo "Listing build/wwwroot"
