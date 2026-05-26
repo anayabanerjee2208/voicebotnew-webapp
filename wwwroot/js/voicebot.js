@@ -5,7 +5,7 @@ window.voiceBot = {
     mediaRecorder: null,
     dotnetRef: null,
 
-    init: async function (endpoint, dotnetRef) {
+    /***init: async function (endpoint, dotnetRef) {
         this.dotnetRef = dotnetRef;
 
         this.client = new window.AgentsSDK.Client({
@@ -13,7 +13,25 @@ window.voiceBot = {
         });
 
         this.conversation = await this.client.createConversation();
-    },
+    },***/
+
+    init: async function (endpoint, dotnetRef) {
+
+    console.log("AgentsSDK:", window.AgentsSDK);
+
+    if (!window.AgentsSDK) {
+        console.error("AgentsSDK failed to load");
+        return;
+    }
+
+    this.dotnetRef = dotnetRef;
+
+    this.client = new window.AgentsSDK.Client({
+        endpoint: endpoint
+    });
+
+    this.conversation = await this.client.createConversation();
+},
 
     startMic: async function () {
         this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
