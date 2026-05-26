@@ -1,5 +1,10 @@
 name: Build, Deploy, Test
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 on:
   push:
     branches: [ main ]
@@ -23,23 +28,21 @@ jobs:
           dotnet restore
           dotnet publish -c Release -o build
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          
-
-      - name: Install Playwright
-        run: |
-          npm install
-          chmod +x node_modules/.bin/playwright
-          npx playwright install --with-deps
-
       - name: List build output
         run: |
           echo "Listing build/wwwroot"
           ls -R build/wwwroot
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm install
+          chmod -R +x node_modules/.bin
+          npx playwright install --with-deps
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -49,7 +52,8 @@ jobs:
           force_orphan: true
 
       - name: Run Playwright tests against GitHub Pages
+        env:
+          PLAYWRIGHT_BASE_URL: https://anayabanerjee2208.github.io/voicebotnew-webapp/
         run: |
-          export PLAYWRIGHT_BASE_URL="https://anayabanerjee2208.github.io/voicebotnew-webapp/"
+          echo "Testing against $PLAYWRIGHT_BASE_URL"
           npx playwright test
-
